@@ -55,6 +55,10 @@ class LanguageInstaller extends Command
 
                 $fileContent = $this->resourcesRepository->findForVersion($versions[$this->resourcesRepository->getLatestVersion()], $lang, $file);
 
+                if (empty($fileContent)) {
+                    continue;
+                }
+
                 $filename = $langPath.DIRECTORY_SEPARATOR.$file.'.php';
 
                 if (! file_exists($filename)) {
