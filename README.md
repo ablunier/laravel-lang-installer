@@ -28,7 +28,7 @@ php artisan vendor:publish
 
 ## Configuration
 
-Edit the 'lang-installer.php' file in your config folder to add your required language and files.
+Edit the 'lang-installer.php' file in your config folder to add your required languages and files.
 
 ## Usage
 
