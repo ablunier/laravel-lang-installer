@@ -1,6 +1,6 @@
 # Laravel languages installer
 
-Install translation files for any language with a command in your laravel projects. The language files will be downloaded from the awesome [cauoecs languages repository](https://github.com/caouecs/Laravel-lang).
+Install translation files for any language with a command in your laravel projects. The language files will be downloaded from the awesome [caouecs languages repository](https://github.com/caouecs/Laravel-lang).
 
 ### Requirements
 * PHP 5.5 or higher.
