@@ -39,7 +39,7 @@ class GithubResourcesRepository implements ResourcesRepository
      */
     protected function getUrl($version, $lang, $file)
     {
-        return $this->getLocation() . '/' . $version . '/' . $lang . '/' . $file . '.php';
+        return $this->getLocation() . '/' . $version . '/src/' . $lang . '/' . $file . '.php';
     }
 
     /**
