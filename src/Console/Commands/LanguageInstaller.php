@@ -11,7 +11,7 @@ class LanguageInstaller extends Command
      *
      * @var string
      */
-    protected $signature = 'lang:install';
+    protected $signature = 'lang:install {lang? : The Name of language}';
 
     /**
      * The console command description.
@@ -40,34 +40,47 @@ class LanguageInstaller extends Command
     public function handle()
     {
         $versions = $this->resourcesRepository->getVersions();
+        $lang = $this->argument('lang');
 
-        foreach (config('lang-installer.languages') as $lang) {
-            $this->info(sprintf('Retrieving files for [%s] language...', $lang).PHP_EOL);
-
-            $langPath = $this->getLangResourcesPath().DIRECTORY_SEPARATOR.$lang;
-
-            if (! is_dir($langPath)) {
-                mkdir($langPath, 0755, true);
+        if ($lang=="") {
+            foreach (config('lang-installer.languages') as $lang) {
+                $this->installLang($lang, $versions);
             }
 
-            foreach (config('lang-installer.files') as $file) {
-                $this->info(sprintf('Retrieving content for [%s] translations file...', $file).PHP_EOL);
+            $this->info('All language files installed correctly.'.PHP_EOL);
+        }
+        else {
+            $this->installLang($lang, $versions);
 
-                $fileContent = $this->resourcesRepository->findForVersion($versions[$this->resourcesRepository->getLatestVersion()], $lang, $file);
+            $this->info(sprintf('Language %s files installed correctly.', $lang).PHP_EOL);
+        }
+    }
 
-                if (empty($fileContent)) {
-                    continue;
-                }
+    protected function installLang($lang, $versions)
+    {
+        $this->info(sprintf('Retrieving files for [%s] language...', $lang).PHP_EOL);
 
-                $filename = $langPath.DIRECTORY_SEPARATOR.$file.'.php';
+        $langPath = $this->getLangResourcesPath().DIRECTORY_SEPARATOR.$lang;
 
-                if (! file_exists($filename)) {
-                    file_put_contents($filename, $fileContent);
-                }
-            }
+        if (! is_dir($langPath)) {
+            mkdir($langPath, 0755, true);
         }
 
-        $this->info('All language files installed correctly.'.PHP_EOL);
+        foreach (config('lang-installer.files') as $file) {
+            $this->info(sprintf('Retrieving content for [%s] translations file...', $file).PHP_EOL);
+
+            $fileContent = $this->resourcesRepository->findForVersion($versions[$this->resourcesRepository->getLatestVersion()], $lang, $file);
+
+            if (empty($fileContent)) {
+                continue;
+            }
+
+            $filename = $langPath.DIRECTORY_SEPARATOR.$file.'.php';
+
+            if (! file_exists($filename)) {
+                file_put_contents($filename, $fileContent);
+            }
+        }
     }
 
     protected function getLangResourcesPath()
